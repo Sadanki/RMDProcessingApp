@@ -1,38 +1,38 @@
 @model IEnumerable<RMDProcessingApp.Models.Participant>
 
 @{
-    ViewData["Title"] = "Participants";
+    ViewData["Title"] = "Participant List";
 }
 
 <h2>Participant List</h2>
 
-@if (!Model.Any())
-{
-    <p>No participants yet.</p>
-}
-else
-{
-    <table class="table">
+<a asp-action="Create" class="btn btn-primary mb-2">Add Participant</a>
+
+<table class="table">
+    <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>DOB</th>
+        <th>Status</th>
+        <th>Plan</th>
+        <th>Actions</th>
+    </tr>
+    @foreach (var p in Model)
+    {
         <tr>
-            <th>ID</th>
-            <th>Name</th>
-            <th>Plan ID</th>
-            <th>Age</th>
-            <th>RMD Status</th>
-            <th></th>
+            <td>@p.ParticipantId</td>
+            <td>@p.FullName</td>
+            <td>@p.DateOfBirth.ToShortDateString()</td>
+            <td>@p.ParticipantStatus</td>
+            <td>@p.PlanType</td>
+            <td>
+                <a asp-action="Summary" asp-route-id="@p.ParticipantId">Summary</a> |
+                <a asp-action="Edit" asp-route-id="@p.ParticipantId">Edit</a> |
+                <a asp-action="Delete" asp-route-id="@p.ParticipantId">Delete</a> |
+                <a asp-controller="Rmd" asp-action="CheckEligibility" asp-route-participantId="@p.ParticipantId">
+                    RMD Eligibility
+                </a>
+            </td>
         </tr>
-        @foreach (var p in Model)
-        {
-            <tr>
-                <td>@p.ParticipantId</td>
-                <td>@p.FullName</td>
-                <td>@p.PlanId</td>
-                <td>@p.Age</td>
-                <td>@p.RmdStatus</td>
-                <td>
-                    <a asp-controller="Participant" asp-action="Summary" asp-route-id="@p.ParticipantId">Summary</a>
-                </td>
-            </tr>
-        }
-    </table>
-}
+    }
+</table>

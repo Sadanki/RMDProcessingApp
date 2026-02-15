@@ -1,3 +1,4 @@
+using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace RMDProcessingApp.Models
@@ -7,15 +8,37 @@ namespace RMDProcessingApp.Models
         public int ParticipantId { get; set; }
 
         [Required(ErrorMessage = "Full name is required")]
-        public string FullName { get; set; }
+        [StringLength(100, MinimumLength = 2, ErrorMessage = "Name must be 2–100 characters")]
+        public string FullName { get; set; } = string.Empty;
 
-        [Required(ErrorMessage = "Plan ID is required")]
-        public string PlanId { get; set; }
+        [Required]
+        [DataType(DataType.Date)]
+        public DateTime DateOfBirth { get; set; }
 
-        [Range(18, 100, ErrorMessage = "Age must be between 18 and 100")]
-        public int Age { get; set; }
+        [Required, StringLength(50)]
+        public string NationalId { get; set; } = string.Empty;
 
-        // IMPORTANT: no [Required], nullable
-        public string? RmdStatus { get; set; }
+        [EmailAddress]
+        public string? Email { get; set; }
+
+        [Phone]
+        public string? Phone { get; set; }
+
+        [StringLength(200)]
+        public string? Address { get; set; }
+
+        [Required, StringLength(50)]
+        public string PlanType { get; set; } = "PLAN-401K";
+
+        [Required, StringLength(50)]
+        public string EmploymentStatus { get; set; } = "Active";
+
+        // Active / Retired / Deceased
+        [Required, StringLength(20)]
+        public string ParticipantStatus { get; set; } = "Active";
+
+        // Convenience (not mapped): computed from DateOfBirth
+        public int Age =>
+            (int)((DateTime.Today - DateOfBirth).TotalDays / 365.25);
     }
 }

@@ -1,0 +1,72 @@
+@model RMDProcessingApp.Models.Rmd
+
+@{
+    ViewData["Title"] = "RMD Details";
+    var participant = (RMDProcessingApp.Models.Participant)ViewBag.Participant;
+}
+
+<h2>RMD Details</h2>
+
+<h4>Participant</h4>
+<table class="table">
+    <tr><td><strong>ID</strong></td><td>@participant.ParticipantId</td></tr>
+    <tr><td><strong>Name</strong></td><td>@participant.FullName</td></tr>
+    <tr><td><strong>DOB</strong></td><td>@participant.DateOfBirth.ToShortDateString()</td></tr>
+    <tr><td><strong>Age</strong></td><td>@participant.Age</td></tr>
+</table>
+
+<h4>RMD</h4>
+<table class="table">
+    <tr><td><strong>RMD ID</strong></td><td>@Model.RmdId</td></tr>
+    <tr><td><strong>Financial Year</strong></td><td>@Model.FinancialYear</td></tr>
+    <tr><td><strong>Opening Balance</strong></td><td>@Model.OpeningBalance</td></tr>
+    <tr><td><strong>Calculated Amount</strong></td><td>@Model.CalculatedAmount</td></tr>
+    <tr><td><strong>Status</strong></td><td>@Model.Status</td></tr>
+    <tr><td><strong>Created</strong></td><td>@Model.CreatedDate</td></tr>
+    <tr><td><strong>Approved</strong></td><td>@Model.ApprovedDate</td></tr>
+</table>
+
+<!-- Conditional action buttons -->
+@if (Model.Status == "Draft")
+{
+    <form asp-action="Approve" method="post" class="d-inline">
+        @Html.AntiForgeryToken()
+        <input type="hidden" name="id" value="@Model.RmdId" />
+        <button type="submit" class="btn btn-success">Approve RMD</button>
+    </form>
+}
+else if (Model.Status == "Approved")
+{
+    <form asp-action="ProcessTurnOne" method="post" class="d-inline">
+        @Html.AntiForgeryToken()
+        <input type="hidden" name="id" value="@Model.RmdId" />
+        <button type="submit" class="btn btn-primary">Start Turn 1</button>
+    </form>
+}
+else if (Model.Status == "ProcessingTurn1")
+{
+    <form asp-action="ProcessTurnTwo" method="post" class="d-inline">
+        @Html.AntiForgeryToken()
+        <input type="hidden" name="id" value="@Model.RmdId" />
+        <button type="submit" class="btn btn-primary">Start Turn 2</button>
+    </form>
+}
+
+<!-- Stop RMD form -->
+<form asp-action="StopRmd" method="post" class="mt-2">
+    @Html.AntiForgeryToken()
+    <input type="hidden" name="id" value="@Model.RmdId" />
+    <div class="form-group">
+        <label>Reason to stop</label>
+        <input type="text" name="reason" class="form-control" />
+    </div>
+    <button type="submit" class="btn btn-warning mt-1">Stop RMD</button>
+</form>
+
+<!-- Back link -->
+<a asp-controller="Participant"
+   asp-action="Summary"
+   asp-route-id="@participant.ParticipantId"
+   class="btn btn-secondary mt-2">
+    Back to Participant
+</a>

@@ -16,15 +16,23 @@
         <td>@Model.FullName</td>
     </tr>
     <tr>
-        <td><strong>Plan ID</strong></td>
-        <td>@Model.PlanId</td>
+        <td><strong>Date of Birth</strong></td>
+        <td>@Model.DateOfBirth.ToShortDateString()</td>
     </tr>
     <tr>
-        <td><strong>Age</strong></td>
-        <td>@Model.Age</td>
+        <td><strong>National ID</strong></td>
+        <td>@Model.NationalId</td>
     </tr>
     <tr>
-        <td><strong>RMD Status</strong></td>
-        <td>@Model.RmdStatus</td>
+        <td><strong>Plan Type</strong></td>
+        <td>@Model.PlanType</td>
+    </tr>
+    <tr>
+        <td><strong>Employment Status</strong></td>
+        <td>@Model.EmploymentStatus</td>
+    </tr>
+    <tr>
+        <td><strong>Participant Status</strong></td>
+        <td>@Model.ParticipantStatus</td>
     </tr>
 </table>

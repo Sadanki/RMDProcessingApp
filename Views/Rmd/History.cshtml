@@ -1,0 +1,32 @@
+@model IEnumerable<RMDProcessingApp.Models.Rmd>
+
+@{
+    var participant = (RMDProcessingApp.Models.Participant)ViewBag.Participant;
+    ViewData["Title"] = "RMD History";
+}
+
+<h2>RMD History for @participant.FullName (@participant.ParticipantId)</h2>
+
+<table class="table">
+    <tr>
+        <th>RMD ID</th>
+        <th>Year</th>
+        <th>Opening Balance</th>
+        <th>Amount</th>
+        <th>Status</th>
+        <th>Created</th>
+        <th>Approved</th>
+    </tr>
+    @foreach (var r in Model)
+    {
+        <tr>
+            <td>@r.RmdId</td>
+            <td>@r.FinancialYear</td>
+            <td>@r.OpeningBalance</td>
+            <td>@r.CalculatedAmount</td>
+            <td>@r.Status</td>
+            <td>@r.CreatedDate</td>
+            <td>@r.ApprovedDate</td>
+        </tr>
+    }
+</table>

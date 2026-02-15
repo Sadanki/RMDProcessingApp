@@ -1,0 +1,27 @@
+@model IEnumerable<RMDProcessingApp.Models.AuditLog>
+
+<h2>Audit Logs</h2>
+
+<table class="table">
+    <tr>
+        <th>Time</th>
+        <th>Entity</th>
+        <th>Entity Id</th>
+        <th>Action</th>
+        <th>Old</th>
+        <th>New</th>
+        <th>User</th>
+    </tr>
+    @foreach (var log in Model)
+    {
+        <tr>
+            <td>@log.PerformedAt</td>
+            <td>@log.EntityName</td>
+            <td>@log.EntityId</td>
+            <td>@log.ActionPerformed</td>
+            <td>@log.OldValue</td>
+            <td>@log.NewValue</td>
+            <td>@log.PerformedBy</td>
+        </tr>
+    }
+</table>

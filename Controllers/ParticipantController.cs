@@ -1,73 +1,120 @@
 using Microsoft.AspNetCore.Mvc;
 using RMDProcessingApp.Models;
 using RMDProcessingApp.Repositories;
-using RMDProcessingApp.Services;
 
 namespace RMDProcessingApp.Controllers
 {
     public class ParticipantController : Controller
     {
         private readonly IParticipantRepository _repository;
-        private readonly IRmdService _rmdService;
 
-        public ParticipantController(IParticipantRepository repository, IRmdService rmdService)
+        public ParticipantController(IParticipantRepository repository)
         {
             _repository = repository;
-            _rmdService = rmdService;
         }
-        
+
+        private string? CurrentRole => HttpContext.Session.GetString("CurrentUserRole");
+
         public IActionResult Index()
         {
             return RedirectToAction("List");
         }
 
-        [HttpGet]
-        public IActionResult Create()
-        {
-            return View();
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public IActionResult Create(Participant participant)
-        {
-            // Debug: log whether we hit POST
-            Console.WriteLine($"[DEBUG] Create POST hit. Name={participant?.FullName}, PlanId={participant?.PlanId}, Age={participant?.Age}");
-
-            if (!ModelState.IsValid)
-            {
-                Console.WriteLine("[DEBUG] ModelState is invalid");
-                foreach (var kvp in ModelState)
-                {
-                    var key = kvp.Key;
-                    var state = kvp.Value;
-                    foreach (var error in state.Errors)
-                    {
-                        Console.WriteLine($"[DEBUG] Error on '{key}': {error.ErrorMessage}");
-                    }
-                }
-                return View(participant);
-            }
-
-            participant.RmdStatus = _rmdService.DetermineRmdStatus(participant.Age);
-            _repository.Add(participant);
-            Console.WriteLine("[DEBUG] Participant added, redirecting to List");
-            return RedirectToAction("List");
-        }
-
+        // List: read-only, all roles
         public IActionResult List()
         {
             var participants = _repository.GetAll();
             return View(participants);
         }
 
+        // Summary: read-only, all roles
         public IActionResult Summary(int id)
         {
             var participant = _repository.GetById(id);
-            if (participant == null)
-                return NotFound();
+            if (participant == null) return NotFound();
+            return View(participant);
+        }
+
+        [HttpGet]
+        public IActionResult Create()
+        {
+            if (CurrentRole is not ("Admin" or "Processor"))
+                return Forbid();
+
+            return View(new Participant
+            {
+                ParticipantStatus = "Active",
+                PlanType = "PLAN-401K",
+                EmploymentStatus = "Active",
+                DateOfBirth = DateTime.Today.AddYears(-73)
+            });
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Create(Participant participant)
+        {
+            if (CurrentRole is not ("Admin" or "Processor"))
+                return Forbid();
+
+            if (ModelState.IsValid)
+            {
+                _repository.Add(participant);
+                return RedirectToAction("List");
+            }
 
             return View(participant);
+        }
+
+        [HttpGet]
+        public IActionResult Edit(int id)
+        {
+            if (CurrentRole is not ("Admin" or "Processor"))
+                return Forbid();
+
+            var participant = _repository.GetById(id);
+            if (participant == null) return NotFound();
+            return View(participant);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Edit(int id, Participant participant)
+        {
+            if (CurrentRole is not ("Admin" or "Processor"))
+                return Forbid();
+
+            if (id != participant.ParticipantId) return BadRequest();
+
+            if (ModelState.IsValid)
+            {
+                _repository.Update(participant);
+                return RedirectToAction("List");
+            }
+
+            return View(participant);
+        }
+
+        [HttpGet]
+        public IActionResult Delete(int id)
+        {
+            if (CurrentRole is not ("Admin" or "Processor"))
+                return Forbid();
+
+            var participant = _repository.GetById(id);
+            if (participant == null) return NotFound();
+            return View(participant);
+        }
+
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public IActionResult DeleteConfirmed(int id)
+        {
+            if (CurrentRole is not ("Admin" or "Processor"))
+                return Forbid();
+
+            _repository.Delete(id);
+            return RedirectToAction("List");
         }
     }
 }

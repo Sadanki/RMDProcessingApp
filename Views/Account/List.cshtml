@@ -1,0 +1,27 @@
+@model IEnumerable<RMDProcessingApp.Models.Account>
+
+@{
+    var participant = (RMDProcessingApp.Models.Participant)ViewBag.Participant;
+}
+
+<h2>Accounts for @participant.FullName (@participant.ParticipantId)</h2>
+
+<table class="table">
+    <tr>
+        <th>Account #</th>
+        <th>Type</th>
+        <th>Opening Balance</th>
+        <th>Current Balance</th>
+        <th>Last Valuation</th>
+    </tr>
+    @foreach (var a in Model)
+    {
+        <tr>
+            <td>@a.AccountNumber</td>
+            <td>@a.AccountType</td>
+            <td>@a.OpeningBalance</td>
+            <td>@a.CurrentBalance</td>
+            <td>@a.LastValuationDate.ToShortDateString()</td>
+        </tr>
+    }
+</table>

@@ -1,0 +1,31 @@
+@model IEnumerable<RMDProcessingApp.Models.User>
+
+<h2>Admin Dashboard</h2>
+
+<h4>Users</h4>
+<table class="table">
+    <tr><th>ID</th><th>Name</th><th>Email</th><th>Role</th><th>Status</th></tr>
+    @foreach (var u in Model)
+    {
+        <tr>
+            <td>@u.UserId</td>
+            <td>@u.Name</td>
+            <td>@u.Email</td>
+            <td>@u.Role</td>
+            <td>@u.Status</td>
+        </tr>
+    }
+</table>
+
+<h4>System Configuration</h4>
+<table class="table">
+    <tr><th>Key</th><th>Value</th><th>Effective Date</th></tr>
+    @foreach (var c in (IEnumerable<RMDProcessingApp.Models.SystemConfiguration>)ViewBag.Configs)
+    {
+        <tr>
+            <td>@c.ConfigKey</td>
+            <td>@c.ConfigValue</td>
+            <td>@c.EffectiveDate</td>
+        </tr>
+    }
+</table>

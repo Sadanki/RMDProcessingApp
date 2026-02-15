@@ -1,0 +1,59 @@
+@model RMDProcessingApp.Models.Rmd
+
+@{
+    ViewData["Title"] = "Create RMD";
+    var participant = (RMDProcessingApp.Models.Participant)ViewBag.Participant;
+}
+
+<h2>Create RMD</h2>
+
+<h4>Participant</h4>
+<table class="table">
+    <tr>
+        <td><strong>ID</strong></td>
+        <td>@participant.ParticipantId</td>
+    </tr>
+    <tr>
+        <td><strong>Name</strong></td>
+        <td>@participant.FullName</td>
+    </tr>
+    <tr>
+        <td><strong>Date of Birth</strong></td>
+        <td>@participant.DateOfBirth.ToShortDateString()</td>
+    </tr>
+    <tr>
+        <td><strong>Age</strong></td>
+        <td>@participant.Age</td>
+    </tr>
+</table>
+
+<form asp-action="Create" method="post">
+    @Html.AntiForgeryToken()
+    <input type="hidden" asp-for="ParticipantId" />
+
+    <div asp-validation-summary="All" class="text-danger"></div>
+
+    <div class="form-group">
+        <label asp-for="FinancialYear"></label>
+        <input asp-for="FinancialYear" class="form-control" />
+        <span asp-validation-for="FinancialYear" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="OpeningBalance"></label>
+        <input asp-for="OpeningBalance" class="form-control" />
+        <span asp-validation-for="OpeningBalance" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label>Calculated Amount (auto after save)</label>
+        <input value="@Model.CalculatedAmount" class="form-control" readonly />
+    </div>
+
+    <div class="form-group">
+        <label>Status</label>
+        <input value="@Model.Status" class="form-control" readonly />
+    </div>
+
+    <button type="submit" class="btn btn-primary mt-2">Save Draft</button>
+</form>

@@ -1,0 +1,27 @@
+@model IEnumerable<RMDProcessingApp.Models.Rmd>
+
+@{
+    ViewData["Title"] = "Reports Dashboard";
+}
+
+<h2>Reports Dashboard</h2>
+
+<table class="table">
+    <tr>
+        <th>RMD ID</th>
+        <th>Participant ID</th>
+        <th>Year</th>
+        <th>Amount</th>
+        <th>Status</th>
+    </tr>
+    @foreach (var r in Model)
+    {
+        <tr>
+            <td>@r.RmdId</td>
+            <td>@r.ParticipantId</td>
+            <td>@r.FinancialYear</td>
+            <td>@r.CalculatedAmount</td>
+            <td>@r.Status</td>
+        </tr>
+    }
+</table>

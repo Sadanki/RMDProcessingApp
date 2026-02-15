@@ -1,0 +1,51 @@
+@using RMDProcessingApp.Models
+@{
+    ViewData["Title"] = "RMD Eligibility Check";
+    var participant = (Participant)ViewBag.Participant;
+    bool eligible = (bool)ViewBag.Eligible;
+}
+
+<h2>RMD Eligibility Check</h2>
+
+<table class="table">
+    <tr>
+        <td><strong>Participant ID</strong></td>
+        <td>@participant.ParticipantId</td>
+    </tr>
+    <tr>
+        <td><strong>Name</strong></td>
+        <td>@participant.FullName</td>
+    </tr>
+    <tr>
+        <td><strong>Date of Birth</strong></td>
+        <td>@participant.DateOfBirth.ToShortDateString()</td>
+    </tr>
+    <tr>
+        <td><strong>Age</strong></td>
+        <td>@participant.Age</td>
+    </tr>
+    <tr>
+        <td><strong>Participant Status</strong></td>
+        <td>@participant.ParticipantStatus</td>
+    </tr>
+</table>
+
+@if (eligible)
+{
+    <div class="alert alert-success">
+        This participant is eligible for RMD processing (age ≥ 73 and Active).
+    </div>
+
+    <a asp-controller="Rmd"
+       asp-action="Create"
+       asp-route-participantId="@participant.ParticipantId"
+       class="btn btn-primary">
+        Create RMD
+    </a>
+}
+else
+{
+    <div class="alert alert-warning">
+        This participant is not eligible for RMD processing. Record is view-only.
+    </div>
+}
