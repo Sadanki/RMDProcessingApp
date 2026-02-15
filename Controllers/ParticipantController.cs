@@ -15,6 +15,11 @@ namespace RMDProcessingApp.Controllers
             _repository = repository;
             _rmdService = rmdService;
         }
+        
+        public IActionResult Index()
+        {
+            return RedirectToAction("List");
+        }
 
         [HttpGet]
         public IActionResult Create()
