@@ -1,0 +1,33 @@
+@model RMDProcessingApp.Models.Participant
+
+@{
+    ViewData["Title"] = "Create Participant";
+}
+
+<h2>Create Participant</h2>
+
+<form asp-controller="Participant" asp-action="Create" method="post">
+    @Html.AntiForgeryToken()
+
+    <div asp-validation-summary="All" class="text-danger"></div>
+
+    <div class="form-group">
+        <label asp-for="FullName"></label>
+        <input asp-for="FullName" class="form-control" />
+        <span asp-validation-for="FullName" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="PlanId"></label>
+        <input asp-for="PlanId" class="form-control" />
+        <span asp-validation-for="PlanId" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Age"></label>
+        <input asp-for="Age" type="number" class="form-control" />
+        <span asp-validation-for="Age" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary mt-2">Submit</button>
+</form>

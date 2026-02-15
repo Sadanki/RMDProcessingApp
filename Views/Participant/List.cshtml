@@ -1,0 +1,38 @@
+@model IEnumerable<RMDProcessingApp.Models.Participant>
+
+@{
+    ViewData["Title"] = "Participants";
+}
+
+<h2>Participant List</h2>
+
+@if (!Model.Any())
+{
+    <p>No participants yet.</p>
+}
+else
+{
+    <table class="table">
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Plan ID</th>
+            <th>Age</th>
+            <th>RMD Status</th>
+            <th></th>
+        </tr>
+        @foreach (var p in Model)
+        {
+            <tr>
+                <td>@p.ParticipantId</td>
+                <td>@p.FullName</td>
+                <td>@p.PlanId</td>
+                <td>@p.Age</td>
+                <td>@p.RmdStatus</td>
+                <td>
+                    <a asp-controller="Participant" asp-action="Summary" asp-route-id="@p.ParticipantId">Summary</a>
+                </td>
+            </tr>
+        }
+    </table>
+}

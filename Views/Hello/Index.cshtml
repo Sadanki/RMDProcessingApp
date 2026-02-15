@@ -1,0 +1,12 @@
+@model RMDProcessingApp.Models.RmdInfo
+
+@{
+    ViewData["Title"] = "Hello";
+}
+
+<h1>@Model.ApplicationName</h1>
+
+<p>Page loaded at: <strong>@Model.CurrentTime</strong></p>
+<p>Current RMD Status: <strong>@Model.Status</strong></p>
+<p>@ViewData["Message"]</p>
+<p>ViewData time: @ViewData["Time"]</p>
